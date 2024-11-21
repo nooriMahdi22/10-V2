@@ -75,9 +75,10 @@ function LogIn() {
         setCountdown(120)
         handleAlertinfoTop('کد برای شما ارسال گردید')
       } catch (err) {
+        console.log('err.response', err.response.data.message)
         setErrors((prev) => ({
           ...prev,
-          submit: err.response?.data || err.response?.data?.message || 'خطایی رخ داد. لطفا دوباره تلاش کنید.',
+          submit: err.response?.data?.message || err.response?.data || 'خطایی رخ داد. لطفا دوباره تلاش کنید.',
         }))
       } finally {
         setLoading(false)
@@ -289,7 +290,9 @@ function LogIn() {
                 className={inputClass}
               />
               {errors.phoneNumber && <ErrorMessage message={errors.phoneNumber} />}
+              {errors.submit && <ErrorMessage message={errors.submit} />}
             </div>
+
             <button
               type="submit"
               className="w-full cursor-pointer  bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-200"

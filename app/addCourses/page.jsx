@@ -7,6 +7,7 @@ import persian from 'react-date-object/calendars/persian'
 import persian_fa from 'react-date-object/locales/persian_fa'
 import gregorian from 'react-date-object/calendars/gregorian'
 import gregorian_en from 'react-date-object/locales/gregorian_en'
+import InstructorSelect from '../components/InstructorSelect'
 
 export default function AddCourses() {
   const [admin, setAdmin] = useState(false)
@@ -194,7 +195,7 @@ export default function AddCourses() {
           />
           {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="instructor" className="block text-sm font-medium text-gray-700">
             شناسه مدرس
           </label>
@@ -210,7 +211,9 @@ export default function AddCourses() {
             }`}
           />
           {errors.instructor && <p className="mt-1 text-sm text-red-500">{errors.instructor}</p>}
-        </div>
+        </div> */}
+        <InstructorSelect value={formData.instructor} onChange={handleChange} error={errors.instructor} />
+
         <div>
           <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
             تاریخ شروع
