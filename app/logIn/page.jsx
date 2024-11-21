@@ -70,7 +70,7 @@ function LogIn() {
     if (!phoneError) {
       setLoading(true)
       try {
-        await axios.post('http://localhost:3001/api/v1/users/sms', { phoneNumber: formData.phoneNumber })
+        await axios.post('http://bar.bahareskan.ir/api/v1/users/sms', { phoneNumber: formData.phoneNumber })
         setStep(2)
         setCountdown(120)
         handleAlertinfoTop('کد برای شما ارسال گردید')
@@ -97,7 +97,7 @@ function LogIn() {
     if (!codeError) {
       setLoading(true)
       try {
-        const response = await axios.post('http://localhost:3001/api/v1/users/validSms', {
+        const response = await axios.post('http://bar.bahareskan.ir/api/v1/users/validSms', {
           phoneNumber: formData.phoneNumber,
           verificationCode: formData.verificationCode,
         })
@@ -129,7 +129,7 @@ function LogIn() {
     if (!Object.values(newErrors).some((error) => error)) {
       setLoading(true)
       try {
-        await axios.post('http://localhost:3001/api/v1/users/sms', {
+        await axios.post('http://bar.bahareskan.ir/api/v1/users/sms', {
           phoneNumber: formData.phoneNumber,
           name: formData.name,
           age: formData.age,
