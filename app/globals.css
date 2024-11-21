@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*//* start font */
+@font-face {
+  font-family: 'MyCustomFont1';
+  font-family: 'MyCustomFont1', Arial, sans-serif;
+  src: local('MyCustomFont1');
+  src: local('MyCustomFont1'), url('/api/download') format('woff2');
+  /* url('https://back.bezbinam.ir/api/font') format('woff2'), */
+  /* url('./../public/MY.woff2') format('woff2'), */
+  /* url('IRANSansXFaNum-DemiBold.woff') format('woff'),
+    url('Digi Lotos Bold.ttf') format('ttf'), */
+}
+
+* {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 400, 'rdot' 0.5;
+}
+
+.font-family-thin {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 100, 'rdot' 0.5;
+}
+
+.font-family-extralight {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 200, 'rdot' 0.5;
+}
+
+.font-family-light {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 300, 'rdot' 0.5;
+}
+
+.font-family-normal {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 400, 'rdot' 0.5;
+}
+
+.font-family-medium {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 500, 'rdot' 0.5;
+}
+
+.font-family-semibold {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 600, 'rdot' 0.5;
+}
+
+.font-family-bold {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 700, 'rdot' 0.5;
+}
+
+.font-family-extrabold {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 800, 'rdot' 0.5;
+}
+
+.font-family-black {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 900, 'rdot' 0.5;
+}
+
+.font-family-semibold {
+  font-family: MyCustomFont1, Arial, 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-variation-settings: 'wght' 600, 'rdot' 1;
+}
+/*//* finish font */
+
+/* //* start type */
+.typed-container {
+  /* if you want to use english we use this  */
+  /* direction: ltr; */
+  direction: rtl;
+  text-align: left;
+}
+
+.typed-text {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+}
+
+.typed-cursor {
+  display: inline-block;
+  margin-left: 0.1em;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/*//* finish type */
