@@ -3,10 +3,15 @@ import { useEffect, useState } from 'react'
 import Blog from './components/Blog/Blog'
 import MyHomeInfo from './components/Home/MyHomeInfo'
 import { checkToken } from './utils/logFunction'
+import { useSearchParams } from 'next/navigation'
+import 'animate.css'
+import GetCourses from './components/courses/GetCourses'
 
 export default function Home() {
   //! start  check log in or no
   const [token, setToken] = useState('nothing')
+  const searchParams = useSearchParams()
+
   useEffect(() => {
     const checkTokenAndSetState = async () => {
       try {
@@ -21,25 +26,16 @@ export default function Home() {
     }
 
     // Use setTimeout if you still want the delay
-    setTimeout(checkTokenAndSetState, 1000)
-  }, [])
+    setTimeout(checkTokenAndSetState, 100)
+  }, [searchParams.get('logIn')])
   //* finish  check log in or no
 
-  //!start for log out
-  function handleLogOut() {
-    const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
-
-    if (confirmLogout) {
-      localStorage.setItem('login', '')
-      setToken(false)
-    }
-  }
-  //* finish for log out
   return (
-    <div className="bg-stone-200   items-center justify-center  ">
+    <div className="  items-center justify-center  ">
       <MyHomeInfo token={token} />
 
       <Blog />
+      <GetCourses />
       {/* <Slide /> */}
     </div>
   )

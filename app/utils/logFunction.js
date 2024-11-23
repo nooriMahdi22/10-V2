@@ -6,8 +6,8 @@ export async function checkToken() {
   }
   try {
     const response = await axios.post(
-      'http://localhost:3001/api/v1/users/checkToken',
-      { cache: 'no-store' },
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/checkToken`,
+      { cache: 'no-store', credentials: 'include' },
       {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -33,7 +33,7 @@ export async function checkAdminOrNo() {
   }
   try {
     const response = await axios.post(
-      'http://localhost:3001/api/v1/users/checkToken',
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/checkToken`,
       { cache: 'no-store' },
       {
         headers: {

@@ -9,7 +9,7 @@ function Blog() {
   const [blogs, setBlogs] = useState([])
   const [errorMessage, setErrorMessage] = useState('')
 
-  const API_URL = 'http://localhost:3001/api/blogs/?limit=3'
+  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/blogs/?limit=3`
 
   useEffect(() => {
     fetchBlogs()

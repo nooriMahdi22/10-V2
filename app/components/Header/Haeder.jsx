@@ -1,7 +1,7 @@
 'use client'
 import { checkAdminOrNo, checkToken } from '@/app/utils/logFunction'
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 const HeaderContent = dynamic(() => import('./HeaderContent'), { ssr: false })
@@ -57,10 +57,10 @@ export default function Header() {
   }, [pathname])
 
   return (
-    <div className="w-full h-fit bg-gray-900 dark:bg-gray-200 fixed top-0 ">
+    <div className="w-full h-fit bg-gray-900 dark:bg-gray-200  top-0 z-40 ">
       <header className="lg:px-16 px-4 flex flex-wrap items-center py-4 shadow-lg">
         <div className="flex-1 flex justify-between items-center">
-          <p className="sm:w-[10rem] xs:w-[7rem] w-[3rem]  text-white">تفکر خلاق</p>
+          <p className="sm:w-[10rem] xs:w-[7rem] touch-pan-down   text-white">تفکر‌ خلاق</p>
         </div>
         <label htmlFor="menu-toggle" className="pointer-cursor md:hidden block">
           <svg

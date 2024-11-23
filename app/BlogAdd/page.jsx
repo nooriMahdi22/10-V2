@@ -12,7 +12,7 @@ function Bloggg() {
   const [editId, setEditId] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
 
-  const API_URL = 'http://localhost:3001/api/blogs'
+  const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/blogs`
 
   useEffect(() => {
     fetchBlogs()

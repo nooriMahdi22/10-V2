@@ -2,12 +2,17 @@
 import { useEffect, useState } from 'react'
 import { checkAdminOrNo } from '../utils/logFunction'
 import axios from 'axios'
-import DatePicker from 'react-multi-date-picker'
-import persian from 'react-date-object/calendars/persian'
-import persian_fa from 'react-date-object/locales/persian_fa'
 import gregorian from 'react-date-object/calendars/gregorian'
 import gregorian_en from 'react-date-object/locales/gregorian_en'
-import InstructorSelect from '../components/InstructorSelect'
+import InstructorSelect from '../components/comAddCourses/InstructorSelect'
+import ImageUpload from '../components/comAddCourses/ImageUpload'
+import TitleInput from '../components/comAddCourses/TitleInput'
+import DescriptionInput from '../components/comAddCourses/DescriptionInput'
+import DateRangeInput from '../components/comAddCourses/DateRangeInput'
+import CapacityPriceInput from '../components/comAddCourses/CapacityPriceInput'
+import { showToast, ToastNotifications } from '../utils/alert'
+import DurationInput from '../components/comAddCourses/DurationInput'
+// وارد کردن Animate.css
 
 export default function AddCourses() {
   const [admin, setAdmin] = useState(false)
@@ -38,6 +43,7 @@ export default function AddCourses() {
     capacity: '',
     price: '',
     image: null,
+    duration: '',
   })
 
   const handleChange = (e) => {
@@ -54,79 +60,141 @@ export default function AddCourses() {
     setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
-  const validateForm = () => {
-    let isValid = true
-    let newErrors = {}
-
-    if (!formData.title.trim()) {
-      newErrors.title = 'عنوان دوره الزامی است'
-      isValid = false
-    } else if (formData.title.length > 100) {
-      newErrors.title = 'عنوان دوره نباید بیشتر از 100 کاراکتر باشد'
-      isValid = false
+  // * شروع اعتبار سنجی به صورت دونه ای
+  const validateTitle = (title) => {
+    if (!title.trim()) {
+      return 'عنوان دوره الزامی است'
+    } else if (title.length > 100) {
+      return 'عنوان دوره نباید بیشتر از 100 کاراکتر باشد'
     }
+    return ''
+  }
 
-    if (!formData.description.trim()) {
-      newErrors.description = 'توضیحات دوره الزامی است'
-      isValid = false
+  const validateDescription = (description) => {
+    if (!description.trim()) {
+      return 'توضیحات دوره الزامی است'
     }
+    return ''
+  }
 
-    if (!formData.instructor.trim()) {
-      newErrors.instructor = 'شناسه مدرس الزامی است'
-      isValid = false
+  const validateInstructor = (instructor) => {
+    if (!instructor.trim()) {
+      return 'شناسه مدرس الزامی است'
     }
+    return ''
+  }
 
+  const validateStartDate = (startDate) => {
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
-    if (!formData.startDate) {
-      newErrors.startDate = 'تاریخ شروع الزامی است'
-      isValid = false
-    } else if (formData.startDate.toDate() < today) {
-      newErrors.startDate = 'تاریخ شروع باید امروز یا بعد از آن باشد'
-      isValid = false
+    if (!startDate) {
+      return 'تاریخ شروع الزامی است'
+    } else if (startDate.toDate() < today) {
+      return 'تاریخ شروع باید امروز یا بعد از آن باشد'
+    }
+    return ''
+  }
+
+  const validateEndDate = (endDate, startDate) => {
+    if (!endDate) {
+      return 'تاریخ پایان الزامی است'
+    } else if (endDate.toDate() <= startDate.toDate()) {
+      return 'تاریخ پایان باید بعد از تاریخ شروع باشد'
+    }
+    return ''
+  }
+
+  const validateImage = (image) => {
+    if (!image || !(image instanceof File)) {
+      return 'تصویر دوره الزامی است'
     }
 
-    if (!formData.endDate) {
-      newErrors.endDate = 'تاریخ پایان الزامی است'
-      isValid = false
-    } else if (formData.endDate.toDate() <= formData.startDate.toDate()) {
-      newErrors.endDate = 'تاریخ پایان باید بعد از تاریخ شروع باشد'
-      isValid = false
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
+    if (!allowedTypes.includes(image.type)) {
+      return 'لطفاً یک تصویر معتبر (JPEG، PNG یا GIF) انتخاب کنید'
     }
 
-    if (formData.image == null) {
-      newErrors.image = 'تصویر دوره الزامی است'
-      isValid = false
-    }
+    return ''
+  }
 
-    if (!formData.capacity) {
-      newErrors.capacity = 'ظرفیت دوره الزامی است'
-      isValid = false
-    } else if (parseInt(formData.capacity) <= 0) {
-      newErrors.capacity = 'ظرفیت دوره باید عددی مثبت باشد'
-      isValid = false
+  const validateCapacity = (capacity) => {
+    if (!capacity) {
+      return 'ظرفیت دوره الزامی است'
+    } else if (isNaN(capacity) || parseInt(capacity) <= 0) {
+      return 'ظرفیت دوره باید عددی مثبت باشد'
     }
+    return ''
+  }
 
-    if (!formData.price) {
-      newErrors.price = 'قیمت دوره الزامی است'
-      isValid = false
-    } else if (parseFloat(formData.price) < 0) {
-      newErrors.price = 'قیمت دوره نمی‌تواند منفی باشد'
-      isValid = false
+  const validatePrice = (price) => {
+    if (!price) {
+      return 'قیمت دوره الزامی است'
+    } else if (isNaN(price) || parseFloat(price) < 0) {
+      return 'قیمت دوره باید عددی غیرمنفی باشد'
+    }
+    return ''
+  }
+  // * اعتبار سنجی مدت زمان دوره
+  // * اعتبار سنجی مدت زمان دوره
+  const validateDuration = (duration) => {
+    if (!duration) {
+      return 'مدت زمان دوره الزامی است'
+    } else if (isNaN(duration) || parseInt(duration) <= 0) {
+      return 'مدت زمان دوره باید عددی مثبت باشد'
+    }
+    return ''
+  }
+
+  // * پایان اعتبار سنجی به صورت دونه ای
+
+  // به‌روزرسانی تابع validateForm
+  // * اعتبار سنجی همه در یک جا
+  const validateForm = () => {
+    let isValid = true
+    let newErrors = {}
+    console.log('Image before submission:', formData.image)
+
+    newErrors.title = validateTitle(formData.title)
+    newErrors.description = validateDescription(formData.description)
+    newErrors.instructor = validateInstructor(formData.instructor)
+
+    newErrors.startDate = validateStartDate(formData.startDate)
+
+    newErrors.endDate = validateEndDate(formData.endDate, formData.startDate)
+
+    newErrors.image = validateImage(formData.image)
+
+    newErrors.capacity = validateCapacity(formData.capacity)
+
+    newErrors.price = validatePrice(formData.price)
+
+    newErrors.duration = validateDuration(formData.duration) // اضافه کردن اعتبارسنجی مدت زمان دوره
+
+    // بررسی اینکه آیا خطایی وجود دارد
+    for (const key in newErrors) {
+      if (newErrors[key]) {
+        isValid = false
+        break
+      }
     }
 
     setErrors(newErrors)
+
     return isValid
   }
+  // * اعتبار سنجی همه در یک جا پایان
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (!validateForm()) {
-      setMessage('لطفاً خطاها را قبل از ارسال اصلاح کنید.')
+      setMessage('')
+      showToast('warning', 'لطفاً خطاها را اصلاح کنید.', { theme: 'dark' })
       return
     }
+
+    setLoading(true) // شروع بارگذاری
 
     const data = new FormData()
     for (const key in formData) {
@@ -134,177 +202,141 @@ export default function AddCourses() {
         // Convert to gregorian date
         const gregorianDate = formData[key].convert(gregorian, gregorian_en).format('YYYY-MM-DD')
         data.append(key, gregorianDate)
+      } else if (key === 'image' && formData[key] instanceof File) {
+        // اگر image یک فایل است، آن را با نام فایل اضافه کنید
+        data.append(key, formData[key], formData[key].name)
       } else {
         data.append(key, formData[key])
       }
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/api/v1/courses/', data, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/courses/`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem('login')}`,
         },
       })
-      setMessage('دوره با موفقیت اضافه شد!')
+      showToast('success', 'دوره با موفقیت اضافه شد!')
     } catch (error) {
       console.error('Error adding course:', error)
-      setMessage('افزودن دوره با خطا مواجه شد. لطفاً دوباره تلاش کنید.')
+      showToast('error', 'افزودن دوره با خطا مواجه شد. لطفاً دوباره تلاش کنید.')
+    } finally {
+      setLoading(false) // پایان بارگذاری
     }
   }
 
+  const [imagePreview, setImagePreview] = useState(null)
+  const [loading, setLoading] = useState(false)
+
   if (!admin) {
-    return <div className="mt-40 text-center text-red-500">شما باید ادمین باشید تا بتوانید دوره اضافه کنید.</div>
+    return (
+      <>
+        <ToastNotifications />
+        {/* <AnimatePresence> */}
+        <div className="mt-40 text-center text-red-500 ">
+          <h1 className="animate__lightSpeedOutLeft">شما باید ادمین باشید تا بتوانید دوره اضافه کنید.</h1>
+        </div>
+        {/* </AnimatePresence> */}
+      </>
+    )
   }
 
   return (
-    <div className="mt-40 max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-xl">
-      <h2 className="text-2xl font-bold mb-6 text-center">افزودن دوره جدید</h2>
-      {message && <p className="mb-4 text-center text-green-500">{message}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            عنوان
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="عنوان دوره"
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.title ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title}</p>}
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-            توضیحات
-          </label>
-          <textarea
-            id="description"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="توضیحات دوره"
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.description ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description}</p>}
-        </div>
-        {/* <div>
-          <label htmlFor="instructor" className="block text-sm font-medium text-gray-700">
-            شناسه مدرس
-          </label>
-          <input
-            type="text"
-            id="instructor"
-            name="instructor"
-            value={formData.instructor}
-            onChange={handleChange}
-            placeholder="شناسه مدرس"
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.instructor ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.instructor && <p className="mt-1 text-sm text-red-500">{errors.instructor}</p>}
-        </div> */}
-        <InstructorSelect value={formData.instructor} onChange={handleChange} error={errors.instructor} />
+    <>
+      <ToastNotifications />
 
-        <div>
-          <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
-            تاریخ شروع
-          </label>
-          <DatePicker
-            id="startDate"
-            calendar={persian}
-            locale={persian_fa}
-            calendarPosition="bottom-right"
-            value={formData.startDate}
-            onChange={(date) => handleDateChange(date, 'startDate')}
-            format="YYYY/MM/DD"
-            inputClass={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.startDate ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.startDate && <p className="mt-1 text-sm text-red-500">{errors.startDate}</p>}
-        </div>
-        <div>
-          <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">
-            تاریخ پایان
-          </label>
-          <DatePicker
-            id="endDate"
-            calendar={persian}
-            locale={persian_fa}
-            calendarPosition="bottom-right"
-            value={formData.endDate}
-            onChange={(date) => handleDateChange(date, 'endDate')}
-            format="YYYY/MM/DD"
-            inputClass={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.endDate ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.endDate && <p className="mt-1 text-sm text-red-500">{errors.endDate}</p>}
-        </div>
-        <div>
-          <label htmlFor="capacity" className="block text-sm font-medium text-gray-700">
-            ظرفیت
-          </label>
-          <input
-            type="number"
-            id="capacity"
-            name="capacity"
-            value={formData.capacity}
-            onChange={handleChange}
-            placeholder="ظرفیت"
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.capacity ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.capacity && <p className="mt-1 text-sm text-red-500">{errors.capacity}</p>}
-        </div>
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-            قیمت
-          </label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="قیمت"
-            className={`mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 ${
-              errors.price ? 'border-red-500' : ''
-            }`}
-          />
-          {errors.price && <p className="mt-1 text-sm text-red-500">{errors.price}</p>}
-        </div>
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-            تصویر دوره
-          </label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            onChange={handleChange}
-            accept="image/*"
-            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-          />
-          {errors.image && <p className="mt-1 text-sm text-red-500">{errors.image}</p>}
-        </div>
-        <button
-          type="submit"
-          className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+      <div
+        dir="rtl"
+        className="mt-16 animate__lightSpeedInLeft sm:mt-24 md:mt-32 max-w-xl sm:max-w-2xl mx-auto p-4 sm:p-6 md:p-8 bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl lg:shadow-2xl rtl"
+      >
+        <h2
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.8 }}
+          transition={{ duration: 2, ease: 'easeInOut' }}
+          className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-800"
         >
-          افزودن دوره
-        </button>
-      </form>
-    </div>
+          افزودن دوره جدید
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <TitleInput value={formData.title} onChange={handleChange} error={errors.title} />
+          <DescriptionInput value={formData.description} onChange={handleChange} error={errors.description} />
+          <InstructorSelect value={formData.instructor} onChange={handleChange} error={errors.instructor} />
+          <DateRangeInput
+            startDate={formData.startDate}
+            endDate={formData.endDate}
+            onStartChange={(date) => handleDateChange(date, 'startDate')}
+            onEndChange={(date) => handleDateChange(date, 'endDate')}
+            errors={errors}
+          />
+          <CapacityPriceInput
+            capacity={formData.capacity}
+            price={formData.price}
+            onCapacityChange={(e) => {
+              const value = e.target.value
+              if (value === '' || /^[0-9]+$/.test(value)) {
+                setFormData((prev) => ({
+                  ...prev,
+                  capacity: value,
+                }))
+                // اعتبارسنجی فیلد ظرفیت
+                if (value === '' || isNaN(value) || parseInt(value) <= 0) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    capacity: 'ظرفیت دوره باید عددی مثبت باشد',
+                  }))
+                } else {
+                  setErrors((prev) => ({
+                    ...prev,
+                    capacity: '',
+                  }))
+                }
+              }
+            }}
+            onPriceChange={(e) => {
+              const value = e.target.value.replace(/,/g, '')
+              if (value === '' || /^[0-9]+$/.test(value)) {
+                setFormData((prev) => ({
+                  ...prev,
+                  price: value,
+                }))
+                // اعتبارسنجی فیلد قیمت
+                if (value === '' || isNaN(value) || parseFloat(value) < 0) {
+                  setErrors((prev) => ({
+                    ...prev,
+                    price: 'قیمت دوره باید عددی غیرمنفی باشد',
+                  }))
+                } else {
+                  setErrors((prev) => ({
+                    ...prev,
+                    price: '',
+                  }))
+                }
+              }
+            }}
+            errors={errors}
+            setFormData={setFormData} // ارسال تابع setFormData
+            setErrors={setErrors} // ارسال تابع setErrors
+          />
+          <DurationInput
+            value={formData.duration}
+            onChange={() => {}} // این تابع خالی است چون ما مستقیماً setFormData را در DurationInput استفاده می‌کنیم
+            error={errors.duration}
+            setFormData={setFormData}
+            setErrors={setErrors}
+          />
+          <ImageUpload onChange={handleChange} error={errors.image} />
+          <button
+            type="submit"
+            className="w-full py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+          >
+            افزودن دوره
+          </button>
+        </form>
+      </div>
+    </>
   )
 }

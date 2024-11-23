@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 async function getData(id) {
   // بارگذاری اطلاعات وبلاگ با استفاده از ID
-  const response = await axios.get(`http://localhost:3001/api/blogs/${id}`, { next: { revalidate: 3600 } })
+  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/${id}`, { next: { revalidate: 3600 } })
 
   if (!response.data) {
     throw new Error('چیزی اشتباه است')

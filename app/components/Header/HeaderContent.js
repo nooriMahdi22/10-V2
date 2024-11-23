@@ -1,18 +1,21 @@
 'use client'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 
 export default function HeaderContent({ token, setToken, pathname, admin }) {
   const searchParams = useSearchParams()
+
+  const router = useRouter()
 
   const handleLogOut = useCallback(() => {
     const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
     if (confirmLogout) {
       localStorage.setItem('login', '')
       setToken(false)
+      router.push('/?logIn=true')
     }
-  }, [setToken])
+  }, [])
 
   const isActive = useCallback(
     (path) => {

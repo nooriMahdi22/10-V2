@@ -1,5 +1,6 @@
 import Header from './components/Header/Haeder'
 import './globals.css'
+import 'animate.css'
 
 export const metadata = {
   title: 'Create Next App',
