@@ -54,3 +54,29 @@ export async function checkAdminOrNo() {
     }
   }
 }
+
+export async function checkTokenInfo() {
+  if (!localStorage.getItem('login') || !localStorage.getItem('login').length) {
+    return false
+  }
+  try {
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/checkToken`,
+      { cache: 'no-store', credentials: 'include' },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('login')}`,
+        },
+      }
+    )
+    return response.data.data.user
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      console.log('کاربر هنوز وارد نشده یا ثبت نام نکرده است')
+      return false
+    } else {
+      console.error('خطای غیرمنتظره:', error)
+    }
+  }
+}

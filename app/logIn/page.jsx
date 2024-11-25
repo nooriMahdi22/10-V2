@@ -103,8 +103,14 @@ function LogIn() {
         localStorage.setItem('login', `${response.data.token}`)
         handleAlertinfoTop('کد تایید شد خوش آمدید')
 
+        const newIsSign = searchParams.get('isSign') === 'course'
         setTimeout(() => {
-          router.push('/')
+          console.log('newIsSign', newIsSign)
+          if (newIsSign == true) {
+            router.push('/CourseRegistration')
+          } else {
+            router.push('/')
+          }
         }, 2000)
         // Handle successful login
       } catch (err) {

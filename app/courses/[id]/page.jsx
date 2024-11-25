@@ -1,8 +1,10 @@
 import { convertToShamsi } from '@/app/components/convertDate/ConvertDate'
 import { changeToPersianNum, formatNumberWithComma } from '@/app/components/Help'
+import LogOrCourse from '@/app/components/LogOrCourse/LogOrCourse'
 import { showToast } from '@/app/utils/alert'
 import axios from 'axios'
 import Image from 'next/image'
+import Link from 'next/link'
 
 async function getDataCourse(id) {
   try {
@@ -64,9 +66,8 @@ async function ItemCourses({ params }) {
             )}
             <div className="bg-white p-6 rounded-lg shadow-md">
               <PriceInfo formattedPrice={changeToPersianNum(formatNumberWithComma(data?.price))} />
-              <button className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 mt-4 font-semibold">
-                ثبت نام در دوره
-              </button>
+
+              <LogOrCourse></LogOrCourse>
             </div>
           </div>
         </div>
@@ -89,9 +90,9 @@ function InfoItem({ icon, label, value }) {
 
 function PriceInfo({ formattedPrice }) {
   return (
-    <div className="text-center">
-      <div className="text-2xl font-bold text-blue-600 mb-2">{formattedPrice} تومان</div>
+    <div className="text-center space-y-4">
       <div className="text-sm text-gray-500">قیمت دوره</div>
+      <div className="text-2xl font-bold text-blue-600 mb-2">{formattedPrice} تومان</div>
     </div>
   )
 }

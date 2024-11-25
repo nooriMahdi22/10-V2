@@ -2,8 +2,8 @@
 import axios from 'axios'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import { convertToShamsi } from '../convertDate/ConvertDate'
-import { changeToPersianNum, formatNumberWithComma } from '../Help'
+import { convertToShamsi } from '../../components/convertDate/ConvertDate'
+import { changeToPersianNum, formatNumberWithComma } from '../../components/Help'
 import Link from 'next/link'
 
 function GetCourses({ limitNumber = false }) {

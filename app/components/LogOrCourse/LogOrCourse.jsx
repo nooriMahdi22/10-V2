@@ -1,13 +1,10 @@
 'use client'
-import { useEffect, useState } from 'react'
-import Blog from './components/Blog/Blog'
-import MyHomeInfo from './components/Home/MyHomeInfo'
-import { checkToken } from './utils/logFunction'
+import { checkToken } from '@/app/utils/logFunction'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import 'animate.css'
-import GetCourses from './components/courses/GetCourses'
+import { useEffect, useState } from 'react'
 
-export default function Home() {
+function LogOrCourse() {
   //! start  check log in or no
   const [token, setToken] = useState('nothing')
   const searchParams = useSearchParams()
@@ -28,15 +25,16 @@ export default function Home() {
     setTimeout(checkTokenAndSetState, 100)
   }, [searchParams.get('logIn')])
   //* finish  check log in or no
-
   return (
-    <div className="  items-center justify-center animate__animated   ">
-      <MyHomeInfo token={token} />
-      <GetCourses limitNumber="4" />
-
-      <Blog />
-      {/* <Slide /> */}
-      <div className="">footer</div>
+    <div>
+      <Link
+        href={`${token ? '/CourseRegistration' : '/logIn?isSign=course'}`}
+        className="animate__animated animate__flipInX   w-full block text-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 mt-4 font-semibold"
+      >
+        {token ? 'ثبت نام دوره' : 'ورود و ثبت نام'}
+      </Link>
     </div>
   )
 }
+
+export default LogOrCourse
