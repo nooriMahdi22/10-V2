@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 export default function HeaderContent({ token, setToken, pathname, admin }) {
   const searchParams = useSearchParams()
@@ -34,6 +34,9 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
     { title: 'ثبت نام', path: '/logIn?isSign=true', isLog: token },
   ]
 
+  const [adminList, setAdminList] = useState(false)
+  const [adminListHidden, setAdminListHidden] = useState(true)
+
   return (
     <nav>
       <ul className="md:flex items-center justify-between text-base text-gray-100 dark:text-gray-600 pt-4 md:pt-0">
@@ -53,12 +56,40 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
 
         {admin == true && (
           <Link
+            onClick={() => {
+              setAdminList(true)
+              setTimeout(() => {
+                setAdminListHidden(false)
+              }, 1000)
+            }}
             className={`md:p-4 py-3 px-0 block  ${isActive('addCourses') ? 'text-rose-500' : 'text-block'}`}
-            href={'/addCourses'}
+            // href={'/addCourses'}
+            href={'/'}
           >
             اضافه کردن دوره
           </Link>
         )}
+
+        <div
+          className={`
+            ${adminListHidden && 'hidden'}
+            
+            ${
+              adminList ? 'animate__animated  animate__fadeInRight' : 'animate__animated animate__fadeOutRight '
+            } bg-blue-700 absolute  right-0 inset-y-0 sm:w-3/12 w-1/3 z-50 p-10 overflow-hidden`}
+        >
+          <div>hi</div>
+          <button
+            onClick={() => {
+              setAdminList(false)
+              setTimeout(() => {
+                setAdminListHidden(true)
+              }, 1000)
+            }}
+          >
+            x
+          </button>
+        </div>
       </ul>
     </nav>
   )

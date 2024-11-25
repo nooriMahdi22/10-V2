@@ -1,17 +1,19 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { checkAdminOrNo } from '../utils/logFunction'
+import { checkAdminOrNo } from '../../utils/logFunction'
 import axios from 'axios'
 import gregorian from 'react-date-object/calendars/gregorian'
 import gregorian_en from 'react-date-object/locales/gregorian_en'
-import InstructorSelect from '../components/comAddCourses/InstructorSelect'
-import ImageUpload from '../components/comAddCourses/ImageUpload'
-import TitleInput from '../components/comAddCourses/TitleInput'
-import DescriptionInput from '../components/comAddCourses/DescriptionInput'
-import DateRangeInput from '../components/comAddCourses/DateRangeInput'
-import CapacityPriceInput from '../components/comAddCourses/CapacityPriceInput'
-import { showToast, ToastNotifications } from '../utils/alert'
-import DurationInput from '../components/comAddCourses/DurationInput'
+import InstructorSelect from '../../components/comAddCourses/InstructorSelect'
+import ImageUpload from '../../components/comAddCourses/ImageUpload'
+import TitleInput from '../../components/comAddCourses/TitleInput'
+import DescriptionInput from '../../components/comAddCourses/DescriptionInput'
+import DateRangeInput from '../../components/comAddCourses/DateRangeInput'
+import CapacityPriceInput from '../../components/comAddCourses/CapacityPriceInput'
+import { showToast, ToastNotifications } from '../../utils/alert'
+import DurationInput from '../../components/comAddCourses/DurationInput'
+import { useRouter } from 'next/navigation'
+import heic2any from 'heic2any'
 // وارد کردن Animate.css
 
 export default function AddCourses() {
@@ -19,11 +21,12 @@ export default function AddCourses() {
   const [message, setMessage] = useState('')
   const [errors, setErrors] = useState({})
 
+  const router = useRouter()
+
   useEffect(() => {
     const checkAdmin = async () => {
       try {
         const logOrNo = await checkAdminOrNo()
-        console.log('logOrNo', logOrNo)
         setAdmin(logOrNo)
       } catch (error) {
         console.error('Error checking token:', error)
@@ -150,10 +153,9 @@ export default function AddCourses() {
 
   // به‌روزرسانی تابع validateForm
   // * اعتبار سنجی همه در یک جا
-  const validateForm = () => {
+  const validateForm = async () => {
     let isValid = true
     let newErrors = {}
-    console.log('Image before submission:', formData.image)
 
     newErrors.title = validateTitle(formData.title)
     newErrors.description = validateDescription(formData.description)
@@ -164,7 +166,6 @@ export default function AddCourses() {
     newErrors.endDate = validateEndDate(formData.endDate, formData.startDate)
 
     newErrors.image = validateImage(formData.image)
-
     newErrors.capacity = validateCapacity(formData.capacity)
 
     newErrors.price = validatePrice(formData.price)
@@ -217,6 +218,7 @@ export default function AddCourses() {
           Authorization: `Bearer ${localStorage.getItem('login')}`,
         },
       })
+      router.push('/addCourses/all')
       showToast('success', 'دوره با موفقیت اضافه شد!')
     } catch (error) {
       console.error('Error adding course:', error)
@@ -250,16 +252,7 @@ export default function AddCourses() {
         dir="rtl"
         className="mt-16 animate__lightSpeedInLeft sm:mt-24 md:mt-32 max-w-xl sm:max-w-2xl mx-auto p-4 sm:p-6 md:p-8 bg-white rounded-lg sm:rounded-xl shadow-lg sm:shadow-xl lg:shadow-2xl rtl"
       >
-        <h2
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 0.8 }}
-          transition={{ duration: 2, ease: 'easeInOut' }}
-          className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-800"
-        >
-          افزودن دوره جدید
-        </h2>
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center text-gray-800">افزودن دوره جدید</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <TitleInput value={formData.title} onChange={handleChange} error={errors.title} />

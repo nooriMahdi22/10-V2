@@ -15,7 +15,6 @@ export default function Header() {
     const checkTokenAndSetState = async () => {
       try {
         const logOrNo = await checkToken()
-        console.log('logOrNo', logOrNo)
         setToken(logOrNo)
       } catch (error) {
         console.error('Error checking token:', error)
@@ -37,7 +36,6 @@ export default function Header() {
     const checkAdmin = async () => {
       try {
         const logOrNo = await checkAdminOrNo()
-        console.log('logOrNo', logOrNo)
         setAdmin(logOrNo)
       } catch (error) {
         console.error('Error checking token:', error)
@@ -59,7 +57,7 @@ export default function Header() {
   return (
     <div className="w-full h-fit bg-gray-900 dark:bg-gray-200  top-0 z-40 ">
       <header className="lg:px-16 px-4 flex flex-wrap items-center py-4 shadow-lg">
-        <div className="flex-1 flex justify-between items-center">
+        <div className="flex-1 flex justify-between items-center  py-4">
           <p className="sm:w-[10rem] xs:w-[7rem] touch-pan-down   text-white">تفکر‌ خلاق</p>
         </div>
         <label htmlFor="menu-toggle" className="pointer-cursor md:hidden block">

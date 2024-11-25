@@ -15,7 +15,6 @@ export async function checkToken() {
         },
       }
     )
-    console.log(response)
     return true
   } catch (error) {
     if (error.response && error.response.status === 401) {

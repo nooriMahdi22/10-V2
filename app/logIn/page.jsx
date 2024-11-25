@@ -75,7 +75,6 @@ function LogIn() {
         setCountdown(120)
         handleAlertinfoTop('کد برای شما ارسال گردید')
       } catch (err) {
-        console.log('err.response', err.response.data.message)
         setErrors((prev) => ({
           ...prev,
           submit: err.response?.data?.message || err.response?.data || 'خطایی رخ داد. لطفا دوباره تلاش کنید.',
@@ -163,7 +162,6 @@ function LogIn() {
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
-      console.log(countdown)
       if (countdown == 1) {
         setStep(1)
       }
@@ -173,7 +171,6 @@ function LogIn() {
 
   //* for when we have error alert that
   useEffect(() => {
-    console.log(errors.submit)
     if (errors.submit) {
       handleAlertinfoTop(errors.submit)
     }

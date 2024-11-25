@@ -6,14 +6,16 @@ import { convertToShamsi } from '../convertDate/ConvertDate'
 import { changeToPersianNum, formatNumberWithComma } from '../Help'
 import Link from 'next/link'
 
-function GetCourses() {
+function GetCourses({ limitNumber = false }) {
   const [dataCourses, setDataCourses] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   async function handleDataCours() {
     try {
       setIsLoading(true)
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/courses/`)
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/courses/?${limitNumber ? `limit=${limitNumber}` : ''}`
+      )
       setDataCourses(response.data.data.courses)
     } catch (error) {
       console.error('Error fetching courses:', error)
@@ -27,13 +29,32 @@ function GetCourses() {
   }, [])
 
   if (isLoading) {
-    return <div className="text-center py-10">در حال بارگذاری دوره‌ها...</div>
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">دوره‌های آموزشی</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mx-auto">
+          <div className="py-4 rounded shadow-md w-60 sm:w-80 animate-pulse bg-gray-50">
+            <div className="flex p-4 space-x-4 sm:px-8">
+              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-gray-300" />
+              <div className="flex-1 py-2 space-y-4">
+                <div className="w-full h-3 rounded bg-gray-300" />
+                <div className="w-5/6 h-3 rounded bg-gray-300" />
+              </div>
+            </div>
+            <div className="p-4 space-y-4 sm:px-8">
+              <div className="w-full h-4 rounded bg-gray-300" />
+              <div className="w-full h-4 rounded bg-gray-300" />
+              <div className="w-3/4 h-4 rounded bg-gray-300" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">دوره‌های آموزشی</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mx-auto">
+    <div className="container mx-auto px-4 ">
+      <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center py-5">دوره‌های آموزشی</h2>
+      <div className="animate__animated  animate__fadeInLeft grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mx-auto">
         {dataCourses.map((item) => (
           <CourseCard key={item._id} course={item} />
         ))}

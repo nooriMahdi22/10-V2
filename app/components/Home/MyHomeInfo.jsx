@@ -42,8 +42,8 @@ function MyHomeInfo({ token }) {
                 token == 'nothing' ? 'h-0 opacity-0' : 'h-11 opacity-100 animate__animated animate__backInDown'
               } px-6 py-2 bg-[#A4FF26]   text-black text-lg font-family-bold rounded-sm transition-all duration-700`}
             >
-              {token ? (
-                <Link className="" href={'/cours'}>
+              {token == true ? (
+                <Link className="" href={'/allCourses'}>
                   ثبت نام دوره{' '}
                 </Link>
               ) : (

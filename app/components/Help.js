@@ -117,10 +117,3 @@ export function convertMoney(price) {
   }
 }
 
-// مثال استفاده
-console.log(convertMoney(230000)) // { value: "230", unit: "هزار تومان" }
-console.log(convertMoney(23323242)) // { value: "23,323,242", unit: "تومان" }
-console.log(convertMoney(1000000)) // { value: "1", unit: "میلیون تومان" }
-console.log(convertMoney(1500000)) // { value: "1.5", unit: "میلیون تومان" }
-console.log(convertMoney(2500)) // { value: "2,500", unit: "تومان" }
-console.log(convertMoney(2500000000)) // { value: "2.5", unit: "میلیارد تومان" }

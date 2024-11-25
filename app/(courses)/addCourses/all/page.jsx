@@ -122,7 +122,7 @@ function CourseCard({ course, onDelete }) {
             <div className="flex space-x-2">
               {/* دکمه ویرایش */}
               <Link
-                href={`/addCourses/all/change/?id=${course._id}`} // مسیر ویرایش دوره
+                href={`/addCourses/all/change/${course._id}`} // مسیر ویرایش دوره
                 className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"
               >
                 ویرایش

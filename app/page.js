@@ -16,7 +16,6 @@ export default function Home() {
     const checkTokenAndSetState = async () => {
       try {
         const logOrNo = await checkToken()
-        console.log('logOrNo', logOrNo)
         setToken(logOrNo)
       } catch (error) {
         console.error('Error checking token:', error)
@@ -34,8 +33,8 @@ export default function Home() {
     <div className="  items-center justify-center  ">
       <MyHomeInfo token={token} />
 
+      <GetCourses limitNumber="2" />
       <Blog />
-      <GetCourses />
       {/* <Slide /> */}
     </div>
   )

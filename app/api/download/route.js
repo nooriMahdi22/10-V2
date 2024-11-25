@@ -5,7 +5,6 @@ export async function GET(req) {
   try {
     // Get the correct path to the font file
     const filePath = path.join(process.cwd(), 'public', 'MY.woff2')
-    console.log(filePath)
 
     // Read the file
     const fileBuffer = await fs.readFile(filePath)

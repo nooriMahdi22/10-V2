@@ -1,22 +1,30 @@
 import { convertToShamsi } from '@/app/components/convertDate/ConvertDate'
 import { changeToPersianNum, formatNumberWithComma } from '@/app/components/Help'
+import { showToast } from '@/app/utils/alert'
 import axios from 'axios'
 import Image from 'next/image'
 
 async function getDataCourse(id) {
-  const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/courses/${id}`, {
-    next: { revalidate: 3600 },
-  })
-
-  if (!response.data) {
-    throw new Error('چیزی اشتباه است')
+  try {
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/courses/${id}`, {
+      next: { revalidate: 3600 },
+    })
+    if (!response.data) {
+      throw new Error('چیزی اشتباه است')
+    }
+    return response.data.data.course
+  } catch (error) {
+    // showToast('warning', 'خطایی پیش امده است')
   }
-  return response.data.data.course
 }
 
 async function ItemCourses({ params }) {
   const { id } = params
   const data = await getDataCourse(id)
+
+  if (!data) {
+    return <div className="">دوره یافت نشد</div>
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-white shadow-lg rounded-lg">
