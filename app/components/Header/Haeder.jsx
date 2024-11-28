@@ -11,6 +11,8 @@ export default function Header() {
   const [admin, setAdmin] = useState(false)
   const pathname = usePathname()
 
+  const searchParams = useSearchParams()
+
   useEffect(() => {
     const checkTokenAndSetState = async () => {
       try {
@@ -30,7 +32,7 @@ export default function Header() {
         setTimeout(checkTokenAndSetState, 500)
       }
     }
-  }, [pathname])
+  }, [searchParams.get('logIn'), pathname])
 
   useEffect(() => {
     const checkAdmin = async () => {
@@ -52,7 +54,7 @@ export default function Header() {
     } else {
       setTimeout(checkAdmin, 2000)
     }
-  }, [pathname])
+  }, [pathname, searchParams.get('logIn')])
 
   return (
     <div className="w-full h-fit bg-gray-900 dark:bg-gray-200  top-0 z-40 ">

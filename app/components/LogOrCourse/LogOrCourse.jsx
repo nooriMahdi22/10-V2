@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-function LogOrCourse() {
+function LogOrCourse({ data = '' }) {
   //! start  check log in or no
   const [token, setToken] = useState('nothing')
   const searchParams = useSearchParams()
@@ -23,12 +23,16 @@ function LogOrCourse() {
 
     // Use setTimeout if you still want the delay
     setTimeout(checkTokenAndSetState, 100)
-  }, [searchParams.get('logIn')])
+  }, [])
   //* finish  check log in or no
   return (
     <div>
       <Link
-        href={`${token ? '/CourseRegistration' : '/logIn?isSign=course'}`}
+        href={`${
+          token
+            ? `/CourseRegistration?coursId=${data.id ? data.id : ''}`
+            : `/logIn?isSign=course&&coursId=${data.id ? data.id : ''}`
+        }`}
         className="animate__animated animate__flipInX   w-full block text-center bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-300 mt-4 font-semibold"
       >
         {token ? 'ثبت نام دوره' : 'ورود و ثبت نام'}

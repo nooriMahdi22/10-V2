@@ -104,10 +104,10 @@ function LogIn() {
         handleAlertinfoTop('کد تایید شد خوش آمدید')
 
         const newIsSign = searchParams.get('isSign') === 'course'
+        const courseId = searchParams.get('coursId')
         setTimeout(() => {
-          console.log('newIsSign', newIsSign)
           if (newIsSign == true) {
-            router.push('/CourseRegistration')
+            router.push(`/CourseRegistration?coursId=${courseId}`)
           } else {
             router.push('/')
           }

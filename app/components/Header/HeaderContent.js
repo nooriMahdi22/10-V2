@@ -9,14 +9,18 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
 
   const router = useRouter()
 
-  const handleLogOut = useCallback(() => {
-    const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
-    if (confirmLogout) {
-      localStorage.setItem('login', '')
-      setToken(false)
-      router.push('/?logIn=true')
-    }
-  }, [])
+  // const handleLogOut = useCallback(() => {
+  //   const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
+  //   if (confirmLogout) {
+  //     localStorage.setItem('login', '')
+  //     setToken(false)
+  //     router.push('/?logIn=true')
+  //   }
+  // }, [])
+
+  function handleUser() {
+    router.push('/userInformation')
+  }
 
   const isActive = useCallback(
     (path) => {
@@ -114,7 +118,15 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
           </Link>
         ))}
 
-        {token === 'nothing' ? <p>در حال بارگذاری</p> : token && <button onClick={handleLogOut}>خروج</button>}
+        {token === 'nothing' ? (
+          <p>در حال بارگذاری</p>
+        ) : (
+          token && (
+            <div className="relative">
+              <button onClick={handleUser}>خروج</button>
+            </div>
+          )
+        )}
 
         {/* //* برای هدر استفاده کن */}
         {/* <div

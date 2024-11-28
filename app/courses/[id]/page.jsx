@@ -38,6 +38,11 @@ async function ItemCourses({ params }) {
           <div className="bg-blue-50 p-6 rounded-lg shadow-inner mb-6">
             <h2 className="text-xl font-semibold text-gray-700 mb-4 text-right">جزئیات دوره</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <InfoItem
+                icon="👥"
+                label="ظرفیت باقی مانده"
+                value={`${changeToPersianNum(data?.availableCapacity)} نفر`}
+              />
               <InfoItem icon="👥" label="ظرفیت" value={`${changeToPersianNum(data?.capacity)} نفر`} />
               <InfoItem icon="🕒" label="مدت زمان" value={`${changeToPersianNum(data?.duration)} ساعت`} />{' '}
               {/* اضافه کردن مدت زمان */}
@@ -67,7 +72,7 @@ async function ItemCourses({ params }) {
             <div className="bg-white p-6 rounded-lg shadow-md">
               <PriceInfo formattedPrice={changeToPersianNum(formatNumberWithComma(data?.price))} />
 
-              <LogOrCourse></LogOrCourse>
+              <LogOrCourse data={data}></LogOrCourse>
             </div>
           </div>
         </div>

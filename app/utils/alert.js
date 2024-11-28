@@ -66,7 +66,7 @@ export const Toust = (
 // import 'react-toastify/dist/ReactToastify.css'
 
 // تابع عمومی برای نمایش توست
-export const showToast = (type, message, options = {}) => {
+export const showToast = (type = 'info', message, options = {}) => {
   const defaultOptions = {
     position: 'top-center',
     autoClose: 3000,

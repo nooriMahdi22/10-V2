@@ -81,7 +81,8 @@ function CourseCard({ course }) {
         <h3 className="text-xl font-semibold text-gray-800 mb-2">{course.title}</h3>
         <p className="text-gray-600 mb-4 line-clamp-2">{course.content}</p>
         <div className="space-y-2 text-sm text-gray-700">
-          <InfoItem icon="👥" label="ظرفیت" value={`${changeToPersianNum(course?.capacity)} نفر`} />
+          <InfoItem icon="👥" label="ظرفیت کل" value={`${changeToPersianNum(course?.capacity)} نفر`} />
+          <InfoItem icon="👥" label="ظرفیت باقی مانده" value={`${changeToPersianNum(course?.availableCapacity)} نفر`} />
           <InfoItem icon="🕒" label="مدت زمان" value={`${changeToPersianNum(course?.duration)} ساعت`} />{' '}
           {/* اضافه کردن مدت زمان */}
           <InfoItem icon="🗓️" label="شروع" value={convertToShamsi(course?.startDate)} />
