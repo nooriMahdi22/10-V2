@@ -3,12 +3,13 @@ import { showToast, ToastNotifications } from '@/app/utils/alert'
 import { checkTokenInfo } from '@/app/utils/logFunction'
 import axios from 'axios'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 function CourseRegistration() {
   const [dataCourses, setDataCourses] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
   //* start get course
 
   async function handleDataCours(id) {
@@ -64,7 +65,9 @@ function CourseRegistration() {
         )
 
         showToast('success', 'ثبت نام شد کامل شد')
-
+        setTimeout(() => {
+          router.push('/userInformation')
+        }, 1000)
         console.log(response)
       } catch (error) {
         showToast('warning', error.response.data.message || 'خطایی رخ داده است')

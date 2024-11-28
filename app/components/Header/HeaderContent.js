@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { FaWindowClose } from 'react-icons/fa'
+import { CiUser } from 'react-icons/ci'
 
 export default function HeaderContent({ token, setToken, pathname, admin }) {
   const searchParams = useSearchParams()
@@ -17,10 +18,6 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
   //     router.push('/?logIn=true')
   //   }
   // }, [])
-
-  function handleUser() {
-    router.push('/userInformation')
-  }
 
   const isActive = useCallback(
     (path) => {
@@ -55,6 +52,7 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
       setAdminListHidden(false)
     }, 100)
   }
+
   return (
     <nav>
       <ul ul className="md:flex items-center justify-between text-base text-gray-100 dark:text-gray-600 pt-4 md:pt-0">
@@ -123,7 +121,9 @@ export default function HeaderContent({ token, setToken, pathname, admin }) {
         ) : (
           token && (
             <div className="relative">
-              <button onClick={handleUser}>خروج</button>
+              <Link href={'/userInformation'}>
+                <CiUser size={24} />
+              </Link>
             </div>
           )
         )}

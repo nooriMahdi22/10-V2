@@ -1,4 +1,5 @@
 'use client'
+import axios from 'axios'
 import { showToast, ToastNotifications } from '@/app/utils/alert'
 import { useState } from 'react'
 
@@ -14,27 +15,48 @@ function UpdateUserInfo({ currentUser, onUpdate }) {
     setError(null)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updateMe`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('login')}`,
+      const response = await axios.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updateMe`,
+        {
+          name,
+          age,
         },
-        body: JSON.stringify({ name, age }),
-      })
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('login')}`,
+          },
+        }
+      )
 
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Failed to update user information')
       }
 
-      const updatedUser = await response.json()
-      onUpdate(updatedUser.data.user) // Call the parent function to update user info
-      setName(updatedUser.data.user.name)
-      setAge(updatedUser.data.user.age)
-      showToast('success', 'اطلاعات با موفقیت به روز شد')
+      const updatedUser = response.data
+      console.log(updatedUser) // Log the response to check its structure
+
+      if (updatedUser.name && updatedUser.age) {
+        onUpdate(updatedUser) // Call the parent function to update user info
+        setName(updatedUser.name)
+        setAge(updatedUser.age)
+      } else if (updatedUser.data && updatedUser.data.user) {
+        onUpdate(updatedUser.data.user) // Call the parent function to update user info
+        setName(updatedUser.data.user.name)
+        setAge(updatedUser.data.user.age)
+      } else {
+        throw new Error('Invalid response structure')
+      }
+
+      // showToast('success', 'اطلاعات با موفقیت به روز شد')
+      alert('اطلسیبمیسبتم')
     } catch (error) {
-      setError(error.message)
-      showToast('error', `${error.message || 'مشکلی پیش امده اینترنت خود را بررسی کنید'}`)
+      if (axios.isAxiosError(error)) {
+        setError(error.message)
+      } else {
+        setError('An unknown error occurred')
+      }
+      showToast('warning', `${error.message || 'مشکلی پیش امده اینترنت خود را بررسی کنید'}`)
     } finally {
       setLoading(false)
     }

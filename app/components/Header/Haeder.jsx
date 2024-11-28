@@ -15,6 +15,7 @@ export default function Header() {
 
   useEffect(() => {
     const checkTokenAndSetState = async () => {
+      console.log('checkTokenAndSetState')
       try {
         const logOrNo = await checkToken()
         setToken(logOrNo)
@@ -24,8 +25,9 @@ export default function Header() {
       }
     }
 
-    if (token !== true) {
-      if (pathname === '/' || pathname.startsWith('/logIn')) {
+    if (token !== true || searchParams.get('logOut')) {
+      console.log('checkTokenAndSetState222')
+      if (pathname == '/' || pathname.startsWith('/logIn')) {
         // setToken('nothing')
         setTimeout(checkTokenAndSetState, 500)
       } else {

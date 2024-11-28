@@ -10,11 +10,12 @@ function DeleteAccount() {
   const router = useRouter()
 
   const handleLogOut = useCallback(() => {
-    const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
+    // const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
+    const confirmLogout = true
     if (confirmLogout) {
       localStorage.setItem('login', '')
       setTimeout(() => {
-        router.push('/')
+        router.push('/?logOut=true')
       }, 1000)
     }
   }, [])
@@ -34,7 +35,7 @@ function DeleteAccount() {
         showToast('info', 'حساب شما با موفقیت حذف شد.')
         localStorage.setItem('login', '')
         setTimeout(() => {
-          router.push('/?logIn=true')
+          router.push('/?logOut=true')
         }, 500)
         // Optionally, redirect the user or perform other actions after deletion
       } else {
