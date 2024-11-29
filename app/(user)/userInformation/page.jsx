@@ -2,7 +2,6 @@
 import { convertToShamsi } from '@/app/components/convertDate/ConvertDate'
 import DeleteAccount from '@/app/components/user/DeleteAccount'
 import { getInfoWithToken } from '@/app/utils/logFunction'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { showToast, ToastNotifications } from '@/app/utils/alert'
@@ -19,8 +18,6 @@ function UserInformation() {
   const [updateLoading, setUpdateLoading] = useState(false)
   const [updateError, setUpdateError] = useState(null)
   const [hiddenChange, setHiddenChange] = useState(true)
-
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     const checkTokenAndSetState = async () => {

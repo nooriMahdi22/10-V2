@@ -1,13 +1,11 @@
 'use client'
 import { checkToken } from '@/app/utils/logFunction'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 function LogOrCourse({ data = '' }) {
   //! start  check log in or no
   const [token, setToken] = useState('nothing')
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     const checkTokenAndSetState = async () => {

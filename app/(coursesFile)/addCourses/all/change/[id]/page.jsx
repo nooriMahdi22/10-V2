@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import TitleInput from '@/app/components/comAddCourses/TitleInput'
 import DescriptionInput from '@/app/components/comAddCourses/DescriptionInput'
 import InstructorSelect from '@/app/components/comAddCourses/InstructorSelect'
