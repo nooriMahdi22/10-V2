@@ -1,3 +1,4 @@
+'use cleint'
 // components/DateRangeInput.js
 import DatePicker from 'react-multi-date-picker'
 import persian from 'react-date-object/calendars/persian'

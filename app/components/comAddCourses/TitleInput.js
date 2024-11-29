@@ -1,3 +1,4 @@
+'use client'
 // components/TitleInput.js
 const TitleInput = ({ value, onChange, error }) => {
   return (

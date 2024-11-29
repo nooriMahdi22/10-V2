@@ -1,3 +1,4 @@
+'use cleint'
 // components/DescriptionInput.js
 const DescriptionInput = ({ value, onChange, error }) => {
   return (

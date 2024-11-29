@@ -1,3 +1,4 @@
+'use cleint'
 // components/CapacityPriceInput.js
 const CapacityPriceInput = ({ capacity, price, onCapacityChange, onPriceChange, errors, setFormData, setErrors }) => {
   return (
