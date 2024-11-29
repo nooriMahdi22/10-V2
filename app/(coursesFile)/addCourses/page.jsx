@@ -13,7 +13,6 @@ import CapacityPriceInput from '../../components/comAddCourses/CapacityPriceInpu
 import { showToast, ToastNotifications } from '../../utils/alert'
 import DurationInput from '../../components/comAddCourses/DurationInput'
 import { useRouter } from 'next/navigation'
-import heic2any from 'heic2any'
 // وارد کردن Animate.css
 
 export default function AddCourses() {

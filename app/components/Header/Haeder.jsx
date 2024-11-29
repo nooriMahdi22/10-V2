@@ -1,63 +1,12 @@
 'use client'
 import { checkAdminOrNo, checkToken } from '@/app/utils/logFunction'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 const HeaderContent = dynamic(() => import('./HeaderContent'), { ssr: false })
 
 export default function Header() {
-  const [token, setToken] = useState('nothing')
-  const [admin, setAdmin] = useState(false)
-  const pathname = usePathname()
-
-  const searchParams = useSearchParams()
-
-  useEffect(() => {
-    const checkTokenAndSetState = async () => {
-      console.log('checkTokenAndSetState')
-      try {
-        const logOrNo = await checkToken()
-        setToken(logOrNo)
-      } catch (error) {
-        console.error('Error checking token:', error)
-        setToken(false)
-      }
-    }
-
-    if (token !== true || searchParams.get('logOut')) {
-      console.log('checkTokenAndSetState222')
-      if (pathname == '/' || pathname.startsWith('/logIn')) {
-        // setToken('nothing')
-        setTimeout(checkTokenAndSetState, 500)
-      } else {
-        setTimeout(checkTokenAndSetState, 500)
-      }
-    }
-  }, [searchParams.get('logIn'), pathname])
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      try {
-        const logOrNo = await checkAdminOrNo()
-        setAdmin(logOrNo)
-      } catch (error) {
-        console.error('Error checking token:', error)
-
-        setAdmin(false)
-      }
-    }
-
-    // Use setTimeout if you still want the delay
-
-    if (pathname === '/' || pathname.startsWith('/logIn')) {
-      // setToken('nothing')
-      setTimeout(checkAdmin, 2000)
-    } else {
-      setTimeout(checkAdmin, 2000)
-    }
-  }, [pathname, searchParams.get('logIn')])
-
   return (
     <div className="w-full h-fit bg-gray-900 dark:bg-gray-200  top-0 z-40 ">
       <header className="lg:px-16 px-4 flex flex-wrap items-center py-4 shadow-lg">
@@ -78,7 +27,9 @@ export default function Header() {
         </label>
         <input className="hidden" type="checkbox" id="menu-toggle" />
         <div className="hidden md:flex md:items-center md:w-auto w-full" id="menu">
-          <HeaderContent token={token} setToken={setToken} pathname={pathname} admin={admin} />
+          <Suspense fallback={<div>Loading...</div>}>
+            <HeaderContent />
+          </Suspense>
         </div>
       </header>
     </div>

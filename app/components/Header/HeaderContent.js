@@ -1,23 +1,64 @@
 'use client'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
 import { FaWindowClose } from 'react-icons/fa'
 import { CiUser } from 'react-icons/ci'
+import { checkAdminOrNo, checkToken } from '@/app/utils/logFunction'
 
-export default function HeaderContent({ token, setToken, pathname, admin }) {
+export default function HeaderContent() {
   const searchParams = useSearchParams()
 
   const router = useRouter()
 
-  // const handleLogOut = useCallback(() => {
-  //   const confirmLogout = window.confirm('آیا مطمئن هستید که می‌خواهید از حساب کاربری خود خارج شوید؟')
-  //   if (confirmLogout) {
-  //     localStorage.setItem('login', '')
-  //     setToken(false)
-  //     router.push('/?logIn=true')
-  //   }
-  // }, [])
+  const [token, setToken] = useState('nothing')
+  const [admin, setAdmin] = useState(false)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    const checkTokenAndSetState = async () => {
+      console.log('checkTokenAndSetState')
+      try {
+        const logOrNo = await checkToken()
+        setToken(logOrNo)
+      } catch (error) {
+        console.error('Error checking token:', error)
+        setToken(false)
+      }
+    }
+
+    if (token !== true || searchParams.get('logOut')) {
+      console.log('checkTokenAndSetState222')
+      if (pathname == '/' || pathname.startsWith('/logIn')) {
+        // setToken('nothing')
+        setTimeout(checkTokenAndSetState, 500)
+      } else {
+        setTimeout(checkTokenAndSetState, 500)
+      }
+    }
+  }, [searchParams.get('logIn'), pathname])
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      try {
+        const logOrNo = await checkAdminOrNo()
+        setAdmin(logOrNo)
+      } catch (error) {
+        console.error('Error checking token:', error)
+
+        setAdmin(false)
+      }
+    }
+
+    // Use setTimeout if you still want the delay
+
+    if (pathname === '/' || pathname.startsWith('/logIn')) {
+      // setToken('nothing')
+      setTimeout(checkAdmin, 2000)
+    } else {
+      setTimeout(checkAdmin, 2000)
+    }
+  }, [pathname, searchParams.get('logIn')])
 
   const isActive = useCallback(
     (path) => {
