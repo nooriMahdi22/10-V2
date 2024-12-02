@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { FaWindowClose } from 'react-icons/fa'
 import { CiUser } from 'react-icons/ci'
@@ -8,8 +8,6 @@ import { checkAdminOrNo, checkToken } from '@/app/utils/logFunction'
 
 export default function HeaderContent() {
   const searchParams = useSearchParams()
-
-  const router = useRouter()
 
   const [token, setToken] = useState('nothing')
   const [admin, setAdmin] = useState(false)
@@ -73,6 +71,7 @@ export default function HeaderContent() {
   const headerLinks = [
     { title: 'خانه', path: '/' },
     { title: 'درباره ما', path: '/about' },
+    { title: 'دوره ها', path: '/allCourses' },
     { title: 'ورود', path: '/logIn?isSign=false', isLog: token },
     { title: 'ثبت نام', path: '/logIn?isSign=true', isLog: token },
   ]
