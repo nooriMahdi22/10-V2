@@ -78,15 +78,15 @@ function ChangeUser({ id, item, setDataUser }) {
             <input className="border" name="name" value={formData.name} onChange={handleChange} />
             <input className="border" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
             <input className="border" name="age" value={formData.age} onChange={handleChange} />
-            <select name="role" value={formData.role}>
+            <select name="role" onChange={handleChange}>
               <option value={item.role}>{item.role}</option>
               {item.role == 'admin' && (
                 <>
                   <option value="instructor">instructor</option>
-                  <option value="studen">studen</option>
+                  <option value="student">student</option>
                 </>
               )}
-              {item.role == 'studen' && (
+              {item.role == 'student' && (
                 <>
                   <option value="admin">admin</option>
                   <option value="instructor">instructor</option>
@@ -95,7 +95,7 @@ function ChangeUser({ id, item, setDataUser }) {
               {item.role == 'instructor' && (
                 <>
                   <option value="admin">admin</option>
-                  <option value="studen">studen</option>
+                  <option value="student">student</option>
                 </>
               )}
             </select>
