@@ -1,6 +1,7 @@
 import Header from './components/Header/Haeder'
 import './globals.css'
 import 'animate.css'
+import { ToastNotifications } from './utils/alert'
 
 export const metadata = {
   title: 'Create Next App',
@@ -11,6 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={``}>
+        <ToastNotifications />
         <Header />
         {children}
       </body>

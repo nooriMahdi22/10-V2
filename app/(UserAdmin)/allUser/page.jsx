@@ -1,6 +1,8 @@
 'use client'
 
+import ChangeUser from '@/app/components/userAdmin/ChangeUser'
 import DeleteUser from '@/app/components/userAdmin/DeleteUser'
+import { ToastNotifications } from '@/app/utils/alert'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
@@ -43,17 +45,20 @@ function AllUser({ limitNumber }) {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 text-center">
-      {dataUser.map((item) => (
-        <div key={item.id} className="flex flex-col p-2 bg-gray-100 gap-4">
-          <p>name: {item.name}</p>
-          <p>age: {item.age}</p>
-          <p>phone: {item.phoneNumber}</p>
-          <p>role: {item.role}</p>
-          <DeleteUser dataUser={dataUser} setDataUser={setDataUser} id={item.id} />
-        </div>
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-4 gap-2 text-center">
+        {dataUser.map((item) => (
+          <div key={item?.id} className="flex flex-col p-2 bg-gray-100 gap-4">
+            <p>name: {item?.name}</p>
+            <p>age: {item?.age}</p>
+            <p>phone: {item?.phoneNumber}</p>
+            <p>role: {item?.role}</p>
+            <DeleteUser dataUser={dataUser} setDataUser={setDataUser} id={item.id} />
+            <ChangeUser id={item.id} setDataUser={setDataUser} item={item} />
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
 

@@ -38,7 +38,6 @@ function DeleteUser({ id, setDataUser, dataUser }) {
   }
   return (
     <>
-      <ToastNotifications />
       <div>
         <button onClick={() => setShowConfirm(true)}>delete</button>
       </div>
