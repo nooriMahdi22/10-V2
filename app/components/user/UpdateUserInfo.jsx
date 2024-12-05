@@ -1,6 +1,6 @@
 'use client'
 import axios from 'axios'
-import { showToast, ToastNotifications } from '@/app/utils/alert'
+import { showToast } from '@/app/utils/alert'
 import { useState } from 'react'
 
 function UpdateUserInfo({ currentUser, onUpdate }) {
@@ -64,7 +64,6 @@ function UpdateUserInfo({ currentUser, onUpdate }) {
 
   return (
     <>
-      <ToastNotifications />
       <div className="mb-6 p-4 border border-gray-300 rounded-lg bg-white shadow-md">
         <h2 className="text-xl font-semibold mb-4">به‌روزرسانی اطلاعات:</h2>
         {error && <p className="text-red-500">{error}</p>}

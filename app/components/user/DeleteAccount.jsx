@@ -1,5 +1,5 @@
 'use client'
-import { showToast, ToastNotifications } from '@/app/utils/alert'
+import { showToast } from '@/app/utils/alert'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
@@ -52,7 +52,6 @@ function DeleteAccount() {
 
   return (
     <>
-      <ToastNotifications />
       <div className="mt-6 space-x-8">
         <button
           onClick={() => setShowConfirm(true)}

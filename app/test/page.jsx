@@ -1,13 +1,12 @@
 'use client'
-import { showToast, ToastNotifications } from '../utils/alert'
+import { showToast } from '../utils/alert'
 
 function Test() {
   function handleAlert(params) {
-    showToast('info', `${'مشکلی پیش امده اینترنت خود را بررسی کنید'}`)
+    showToast('info', `${'😭😭😭😭 😁😁😁😁'}`)
   }
   return (
     <>
-      <ToastNotifications />
       <div onClick={handleAlert}>test</div>
     </>
   )

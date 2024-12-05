@@ -4,7 +4,7 @@ import DeleteAccount from '@/app/components/user/DeleteAccount'
 import { getInfoWithToken } from '@/app/utils/logFunction'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { showToast, ToastNotifications } from '@/app/utils/alert'
+import { showToast } from '@/app/utils/alert'
 import { IoIosArrowUp } from 'react-icons/io'
 
 function UserInformation() {
@@ -279,7 +279,6 @@ function UserInformation() {
 
       {/* Delete Account Component */}
       <DeleteAccount />
-      <ToastNotifications />
     </div>
   )
 }
