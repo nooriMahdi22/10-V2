@@ -69,8 +69,8 @@ function ChangeUser({ id, item, setDataUser }) {
 
   return (
     <>
-      <div>
-        <button className="bg-green-400 p-2 my-2" onClick={() => sethidden(!hidden)}>
+      <div className="">
+        <button className="bg-green-400 p-2 my-2 " onClick={() => sethidden(!hidden)}>
           ChangeUser
         </button>
         {hidden && (
