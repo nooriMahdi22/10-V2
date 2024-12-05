@@ -40,11 +40,11 @@ export default function AddCourses() {
     title: '',
     description: '',
     instructor: '',
-    startDate: null,
-    endDate: null,
+    startDate: undefined,
+    endDate: undefined,
     capacity: '',
     price: '',
-    image: null,
+    image: undefined,
     duration: '',
   })
 
@@ -187,8 +187,10 @@ export default function AddCourses() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    const validation = await validateForm()
+    console.log(validation, 'validation')
 
-    if (!validateForm()) {
+    if (!validation) {
       setMessage('')
       showToast('warning', 'لطفاً خطاها را اصلاح کنید.', { theme: 'dark' })
       return

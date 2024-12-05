@@ -222,7 +222,9 @@ function EditCourse2() {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!validateForm()) {
+    const validation = validateForm()
+
+    if (!validation) {
       showToast('warning', 'لطفاً خطاها را اصلاح کنید.', { theme: 'dark' })
       return
     }
