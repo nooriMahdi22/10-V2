@@ -112,6 +112,10 @@ function Bloggg() {
       content: blog.content,
       image: undefined,
     })
+
+    if (window) {
+      window.scrollTo(0, 0)
+    }
     setEditId(blog._id)
   }
 
@@ -180,7 +184,7 @@ function Bloggg() {
           />
           {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
         </div>
-        <ImageUpload onChange={handleChange} error={errors.image} />
+        <ImageUpload isBlog={true} formData={formData} onChange={handleChange} error={errors.image} />
 
         <button
           type="submit"
@@ -195,7 +199,9 @@ function Bloggg() {
         {blogs.map((blog) => (
           <li key={blog._id} className="bg-white shadow-md rounded-lg p-4 mb-4">
             <h3 className="text-lg font-bold">{blog.title}</h3>
-            <p>{blog.content}</p>
+            <p dir="rtl" className="mb-4 text-gray-700 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3">
+              {blog.content}
+            </p>{' '}
             {blog.image && (
               <Image
                 width={400}

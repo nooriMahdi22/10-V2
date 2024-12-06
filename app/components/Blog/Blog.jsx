@@ -43,7 +43,7 @@ function Blog() {
                 <div key={blog._id} className="relative">
                   <Link href={`/blog/${blog._id}`} className="block overflow-hidden group rounded-xl shadow-lg">
                     <Image
-                      src={blog.image} // استفاده از تصویر بلاگ
+                      src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${blog.image}`} // استفاده از تصویر بلاگ
                       className="object-cover w-full h-56 transition-all duration-300 ease-out sm:h-64 group-hover:scale-110"
                       alt={blog.title}
                       width={400} // عرض تصویر
@@ -59,7 +59,12 @@ function Blog() {
                         {blog.title}
                       </h2>
                     </Link>
-                    <p className="mb-4 text-gray-700 dark:text-gray-300">{blog.content}</p>
+                    <p
+                      dir="rtl"
+                      className="mb-4 text-gray-700 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
+                    >
+                      {blog.content}
+                    </p>{' '}
                     <Link
                       href={`/blog/${blog._id}`}
                       className="font-medium underline text-purple-600 dark:text-purple-400"

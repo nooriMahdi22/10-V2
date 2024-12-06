@@ -144,6 +144,13 @@ export default function HeaderContent() {
                 >
                   نظرات
                 </Link>
+                <Link
+                  onClick={handleCloseAdminList}
+                  className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
+                  href={'/BlogAdd'}
+                >
+                  بلاگ
+                </Link>
                 <button className="" onClick={handleCloseAdminList}>
                   <FaWindowClose />
                 </button>
