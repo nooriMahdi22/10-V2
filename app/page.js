@@ -5,6 +5,7 @@ import MyHomeInfo from './components/Home/MyHomeInfo'
 import { checkToken } from './utils/logFunction'
 import 'animate.css'
 import GetCourses from './components/courses/GetCourses'
+import Comment from './components/comment/Comment'
 
 export default function Home() {
   //! start  check log in or no
@@ -34,6 +35,8 @@ export default function Home() {
 
       <Blog />
       {/* <Slide /> */}
+
+      {token == true && <Comment />}
       <div className="">footer</div>
     </div>
   )

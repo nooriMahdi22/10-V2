@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { FaWindowClose } from 'react-icons/fa'
 import { CiUser } from 'react-icons/ci'
 import { checkAdminOrNo, checkToken } from '@/app/utils/logFunction'
+import { MdOutlineAddToPhotos } from 'react-icons/md'
 
 export default function HeaderContent() {
   const searchParams = useSearchParams()
@@ -110,23 +111,38 @@ export default function HeaderContent() {
                 <Link
                   href={'/addCourses'}
                   onClick={handleCloseAdminList}
-                  className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
+                  className="bg-[#51657B] rounded-md flex justify-center items-center gap-x-1 p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 "
                 >
-                  اضافه کردن دوره
+                  <MdOutlineAddToPhotos />
+                  <span className="font-family-medium">دوره</span>
                 </Link>
                 <Link
                   onClick={handleCloseAdminList}
                   className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
                   href={'/addCourses/all'}
                 >
-                  همه‌ی دوره‌ها
+                  دوره‌ها
                 </Link>
                 <Link
                   onClick={handleCloseAdminList}
                   className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
                   href={'/allUser'}
                 >
-                  همه‌ی کاربرها
+                  کاربرها
+                </Link>
+                <Link
+                  onClick={handleCloseAdminList}
+                  className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
+                  href={'/allRegister'}
+                >
+                  ثبت نامی‌ها
+                </Link>
+                <Link
+                  onClick={handleCloseAdminList}
+                  className="bg-[#51657B] rounded-md p-1 py-2 text-sm w-full text-center hover:bg-white hover:text-[#51657B] transition-all duration-300 font-family-medium"
+                  href={'/comment'}
+                >
+                  نظرات
                 </Link>
                 <button className="" onClick={handleCloseAdminList}>
                   <FaWindowClose />
