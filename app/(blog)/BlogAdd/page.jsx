@@ -3,14 +3,19 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Image from 'next/image'
+import { showToast } from '@/app/utils/alert'
+import ImageUpload from '@/app/components/comAddCourses/ImageUpload'
 
 function Bloggg() {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [image, setImage] = useState(null)
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    image: undefined,
+  })
   const [editId, setEditId] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
+  const [errors, setErrors] = useState({})
 
   const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/blogs`
 
@@ -28,26 +33,73 @@ function Bloggg() {
     }
   }
 
+  const handleChange = (e) => {
+    const { name, value, type, files } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === 'file' ? files[0] : value,
+    }))
+    setErrors((prev) => ({ ...prev, [name]: '' }))
+  }
+
+  const validateForm = () => {
+    let isValid = true
+    let newErrors = {}
+
+    if (!formData.title.trim()) {
+      newErrors.title = 'عنوان بلاگ الزامی است'
+      isValid = false
+    }
+
+    if (!formData.content.trim()) {
+      newErrors.content = 'محتوای بلاگ الزامی است'
+      isValid = false
+    }
+
+    if (!formData.image) {
+      newErrors.image = 'تصویر بلاگ الزامی است'
+      isValid = false
+    }
+
+    setErrors(newErrors)
+    return isValid
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const formData = new FormData()
-    formData.append('title', title)
-    formData.append('content', content)
-    if (image) {
-      formData.append('image', image)
+
+    if (!validateForm()) {
+      setErrorMessage('لطفاً خطاها را اصلاح کنید.')
+      showToast('warning', 'لطفاً خطاها را اصلاح کنید.')
+      return
+    }
+
+    const formDataToSend = new FormData()
+    for (const key in formData) {
+      formDataToSend.append(key, formData[key])
     }
 
     try {
       if (editId) {
-        // Update blog
-        await axios.patch(`${API_URL}/${editId}`, formData)
+        await axios.patch(`${API_URL}/${editId}`, formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('login')}`,
+          },
+        })
+        showToast('success', 'بلاگ با موفقیت تغییر کرد')
       } else {
-        // Create new blog
-        await axios.post(API_URL, formData)
+        await axios.post(API_URL, formDataToSend, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('login')}`,
+          },
+        })
+        showToast('success', 'بلاگ با موفقیت اضافه شد')
       }
       fetchBlogs()
       resetForm()
-      setErrorMessage('') // Reset error message on success
+      setErrorMessage('')
     } catch (error) {
       console.error('Error saving blog:', error)
       setErrorMessage('خطا در ذخیره بلاگ')
@@ -55,15 +107,23 @@ function Bloggg() {
   }
 
   const handleEdit = (blog) => {
-    setTitle(blog.title)
-    setContent(blog.content)
+    setFormData({
+      title: blog.title,
+      content: blog.content,
+      image: undefined,
+    })
     setEditId(blog._id)
   }
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`${API_URL}/${id}`)
+      await axios.delete(`${API_URL}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('login')}`,
+        },
+      })
       fetchBlogs()
+      showToast('success', 'بلاگ با موفقیت حذف شد')
     } catch (error) {
       console.error('Error deleting blog:', error)
       setErrorMessage('خطا در حذف بلاگ')
@@ -71,14 +131,16 @@ function Bloggg() {
   }
 
   const resetForm = () => {
-    setTitle('')
-    setContent('')
-    setImage(null)
+    setFormData({
+      title: '',
+      content: '',
+      image: undefined,
+    })
     setEditId(null)
   }
 
   return (
-    <div className="flex items-center justify-center h- mt-10 flex-col bg-gray-100 p-4  ">
+    <div className="flex items-center justify-center h-full mt-10 flex-col bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-6">مدیریت بلاگ‌ها</h1>
 
       {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
@@ -90,37 +152,36 @@ function Bloggg() {
           </label>
           <input
             type="text"
+            name="title"
             placeholder="عنوان بلاگ"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={formData.title}
+            onChange={handleChange}
             required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.title ? 'border-red-500' : ''
+            }`}
           />
+          {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="content">
             محتوای بلاگ
           </label>
           <textarea
+            name="content"
             placeholder="محتوای بلاگ"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={formData.content}
+            onChange={handleChange}
             required
             rows="4"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
+              errors.content ? 'border-red-500' : ''
+            }`}
           />
+          {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
-            عکس بلاگ
-          </label>
-          <input
-            type="file"
-            onChange={(e) => setImage(e.target.files[0])}
-            accept="image/*"
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border file:border-gray-300 hover:file:bg-gray-100"
-          />
-        </div>
+        <ImageUpload onChange={handleChange} error={errors.image} />
+
         <button
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -139,7 +200,7 @@ function Bloggg() {
               <Image
                 width={400}
                 height={300}
-                src={blog.image}
+                src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${blog.image}`}
                 alt={blog.title}
                 className="mt-2 w-full h-auto rounded-md"
               />
